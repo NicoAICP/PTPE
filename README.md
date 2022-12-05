@@ -1,7 +1,17 @@
 # PTPE
 ## Building
+
+    git clone https://github.com/NicoAICP/PTPE.git
+    cd PTPE
+    git submodule update --init --recursive
+    mkdir build
+    cd build
+    cmake ..
+    make
+
+IMPORTANT!
 Replace the ST7735_TFT.c in pico-st7735/lib-st7735/src with the one in the root of this project.
-This is needed for the display to display correctly
+This is needed for the display to display text correctly!
 
 ## Connecting the LCD:
 SCK -> GP14 (Pin 19)
