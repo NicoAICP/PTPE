@@ -36,7 +36,8 @@ int main() {
     initScreen();
     clearScreen();
     drawHeader("  Pico Toy Pad Emulator  ");
-
+    drawInitSelect();
+    drawFooterCommands(" <>  <v>  <SEL>  <^>  <> ");
     while(1);
     return 0;
 }
