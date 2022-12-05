@@ -1,0 +1,3 @@
+[submodule "pico-st7735"]
+	path = pico-st7735
+	url = https://github.com/bablokb/pico-st7735/
