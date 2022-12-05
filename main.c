@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hw.h"
+#include "menu.h"
 #include "ST7735_TFT.h"
 
 // ---------------------------------------------------------------------------
@@ -31,14 +32,12 @@ int main() {
 #elif defined(TFT_ENABLE_GENERIC)
     TFT_ST7735B_Initialize();
 #endif
-    //setTextWrap(true);
-    fillScreen(ST7735_BLACK);
-    setRotation(3);
-    fillScreen(ST7735_BLACK);
 
-    drawText(5, 5, "  Pico Toy Pad Emulator  ", ST7735_WHITE, ST7735_BLACK, 1);
-    drawFastHLine(0,20,200,ST7735_WHITE);
+    initScreen();
+    clearScreen();
+    drawHeader("  Pico Toy Pad Emulator  ");
 
     while(1);
     return 0;
 }
+

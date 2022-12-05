@@ -63,6 +63,7 @@ add_executable(PTPE
 
 target_sources(PTPE PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/main.c
+        ${CMAKE_CURRENT_LIST_DIR}/menu.c
         )
 
 add_subdirectory(pico-st7735)       
