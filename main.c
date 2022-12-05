@@ -31,13 +31,13 @@ int main() {
 #elif defined(TFT_ENABLE_GENERIC)
     TFT_ST7735B_Initialize();
 #endif
-    setTextWrap(true);
+    //setTextWrap(true);
     fillScreen(ST7735_BLACK);
-    setRotation(1);
+    setRotation(3);
     fillScreen(ST7735_BLACK);
 
-    drawText(10, 10, "PTPE - Pico Toy Pad Emulator", ST7735_WHITE, ST7735_BLACK, 1);
-    drawFastHLine(0,10,200,ST7735_WHITE);
+    drawText(5, 5, "  Pico Toy Pad Emulator  ", ST7735_WHITE, ST7735_BLACK, 1);
+    drawFastHLine(0,20,200,ST7735_WHITE);
 
     while(1);
     return 0;
