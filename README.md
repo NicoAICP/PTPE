@@ -13,6 +13,9 @@ IMPORTANT!
 Replace the ST7735_TFT.c in pico-st7735/lib-st7735/src with the one in the root of this project.  
 This is needed for the display to display text correctly!
 
+IMPORTANT #2!
+You need to copy the tusb_config.h into this location <pico-sdk_location>\lib\tinyusb\src\tusb_config.h
+
 ## Connecting the LCD:
 SCK -> GP14 (Pin 19)  
 SDA -> GP15 (Pin 20)  
