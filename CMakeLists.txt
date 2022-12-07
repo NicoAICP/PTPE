@@ -55,8 +55,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 else()
 endif()
-
-
+set(INCLUDE_DIR /libs)
+include_directories (${INCLUDE_DIR})
 add_executable(PTPE
         main.c
         )
@@ -64,6 +64,8 @@ add_executable(PTPE
 target_sources(PTPE PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/main.c
         ${CMAKE_CURRENT_LIST_DIR}/menu.c
+        ${CMAKE_CURRENT_LIST_DIR}/shared.c
+        ${CMAKE_CURRENT_LIST_DIR}/usb_descriptors.c
         )
 
 add_subdirectory(pico-st7735)       
@@ -74,7 +76,7 @@ add_subdirectory(pico-st7735)
 target_link_libraries(
         PTPE 
         PUBLIC 
-        pico_stdlib
+        pico_stdlib tinyusb_device tinyusb_board hardware_i2c hardware_gpio
         hardware_spi
         st7735
 )
