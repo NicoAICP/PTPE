@@ -1,14 +1,22 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
+#include "hardware/gpio.h"
 #include "hw.h"
 #include "shared.h"
 #include "menu.h"
 #include "ST7735_TFT.h"
 #include "bsp/board.h"
 #include "tusb.h"
-
+#include "pico/cyw43_arch.h"
 #include "usb_descriptors.h"
+
+#define PicoW 1
+#define BUTTON_MISC1 16
+#define BUTTON_LEFT 17
+#define BUTTON_SELECT 18
+#define BUTTON_RIGHT 19
+#define BUTTON_MISC2 20
 // ---------------------------------------------------------------------------
 // hardware-specific intialization
 // SPI_* constants from CMakeLists.txt or user.h
@@ -22,10 +30,41 @@ void init_hw() {
   tft_spi_init();
 }
 
+void init_buttons(){
+    // INIT GPIO for buttons
+  gpio_init(BUTTON_MISC1);
+  gpio_set_dir(BUTTON_MISC1, GPIO_IN);
+  gpio_pull_up(BUTTON_MISC1);
+
+  gpio_init(BUTTON_LEFT);
+  gpio_set_dir(BUTTON_LEFT, GPIO_IN);
+  gpio_pull_up(BUTTON_LEFT);
+
+  gpio_init(BUTTON_RIGHT);
+  gpio_set_dir(BUTTON_RIGHT, GPIO_IN);
+  gpio_pull_up(BUTTON_RIGHT);
+
+  gpio_init(BUTTON_SELECT);
+  gpio_set_dir(BUTTON_SELECT, GPIO_IN);
+  gpio_pull_up(BUTTON_SELECT);
+
+  gpio_init(BUTTON_MISC2);
+  gpio_set_dir(BUTTON_MISC2, GPIO_IN);
+  gpio_pull_up(BUTTON_MISC2);
+}
+
 // ---------------------------------------------------------------------------
 int main() {
 
     init_hw();
+    init_buttons();
+//This code snippet will only be called if PicoW is set to 1. There will be a Wifi and a no Wifi build
+#if PicoW == 1
+    if( cyw43_arch_init() == 0){
+        WifiAllowed = 1;
+    };
+#endif
+
 #ifdef TFT_ENABLE_BLACK
     TFT_BlackTab_Initialize();
 #elif defined(TFT_ENABLE_GREEN)
@@ -38,19 +77,52 @@ int main() {
     DeviceNum = 1; //TODO: ADD TO SELECTION
     initScreen();
     clearScreen();
+
+    int currSel = 0;
+    int maxSel = 2;
+
+    if(WifiAllowed == 1){
+        maxSel = 3;
+    }
+
     drawHeader("  Pico Toy Pad Emulator  ");
     drawInitSelect();
     drawFooterCommands(" <>  <v>  <SEL>  <^>  <> ");
+    //Menu Selection
+    while(Selected == 0)
+    {
+        if (!gpio_get(BUTTON_LEFT))
+        {
+            if(currSel < maxSel){
+                currSel++;
+            }
+            drawInitMenu(currSel);
+        }
+        else if (!gpio_get(BUTTON_SELECT))
+        {
+            Selected = 1;
+        }
+        else if (!gpio_get(BUTTON_RIGHT))
+        {
+             if(currSel > 0){
+                currSel--;
+            }
+            drawInitMenu(currSel);
+        }
+        
+    }
+
     void hid_task(void);
 
-    ////TODO: THIS IS ONLY TO BE CALLED AFTER MENU SELECTION, SETS THE DEVICENUM
-    //TINY USB INIT 
-    board_init();
-    tud_init(0);
+    if(DeviceNum != 3) //IF DeviceNum == 3 then we selected wifi menu
+    {   
+        //TINY USB INIT 
+        board_init();
+        tud_init(0);
 
-
-    while(1){
-        tud_task();
+        while(1){
+            tud_task();
+        }
     }
     return 0;
 }
