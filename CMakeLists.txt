@@ -66,8 +66,9 @@ target_sources(PTPE PUBLIC
         ${CMAKE_CURRENT_LIST_DIR}/menu.c
         ${CMAKE_CURRENT_LIST_DIR}/shared.c
         ${CMAKE_CURRENT_LIST_DIR}/usb_descriptors.c
+        ${CMAKE_CURRENT_LIST_DIR}/hw_config.c
         )
-
+add_subdirectory(no-OS-FatFS-SD-SPI-RPi-Pico/FatFs_SPI build)
 add_subdirectory(pico-st7735)       
 #add_subdirectory(lib/no-OS-FatFS-SD-SPI-RPi-Pico/FatFs_SPI build)
 #include_directories(lib/openssl/include )
@@ -80,6 +81,7 @@ target_link_libraries(
         hardware_spi
         pico_cyw43_arch_none
         st7735
+        FatFs_SPI
 )
 
 # Tell CMake where to find other source code

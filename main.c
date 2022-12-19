@@ -11,7 +11,10 @@
 #include "pico/cyw43_arch.h"
 #include "usb_descriptors.h"
 
-
+#include "rtc.h"
+#include "f_util.h"
+#include "ff.h"
+#include "hw_config.h"
 
 #define PicoW 1
 #define BUTTON_MISC1 16
@@ -85,6 +88,15 @@ int main() {
 
     if(WifiAllowed == 1){
         maxSel = 3;
+    }
+
+    // SDCARD INIT
+    sd_card_t *pSD = sd_get_by_num(0);
+    FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+    if (FR_OK != fr)
+    {
+        drawError(0);
+        while(true);
     }
 
     drawHeader("  Pico Toy Pad Emulator  ");
