@@ -31,8 +31,8 @@ SD_CS -> GP5 (Pin 7)
 SD_MOSI -> GP3 (Pin 5)  
 SD_MISO -> GP4 (Pin 6)  
 SD_SCK -> GP2 (Pin 4)  
-
-##Connecting the Buttons
+  
+## Connecting the Buttons  
 You will be needing 5 Buttons  
 - Button1 (Misc 1)  
 GP16 (Pin 21)  
