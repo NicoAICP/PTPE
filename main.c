@@ -11,6 +11,8 @@
 #include "pico/cyw43_arch.h"
 #include "usb_descriptors.h"
 
+
+
 #define PicoW 1
 #define BUTTON_MISC1 16
 #define BUTTON_LEFT 17
@@ -88,6 +90,7 @@ int main() {
     drawHeader("  Pico Toy Pad Emulator  ");
     drawInitSelect();
     drawFooterCommands(" <>  <v>  <SEL>  <^>  <> ");
+
     //Menu Selection
     while(Selected == 0)
     {
@@ -112,9 +115,11 @@ int main() {
         
     }
 
+    drawMenu(currSel);
+
     void hid_task(void);
 
-    if(DeviceNum != 3) //IF DeviceNum == 3 then we selected wifi menu
+    if(DeviceNum != 3 && DeviceNum != 2) //IF DeviceNum == 3 then we selected wifi menu (Num2 disabled since no Disney support)
     {   
         //TINY USB INIT 
         board_init();
