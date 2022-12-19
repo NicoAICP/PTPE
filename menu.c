@@ -18,8 +18,49 @@ void drawHeader(const char *current_header){
     drawText(5, 5, current_header, ST7735_WHITE, ST7735_BLACK, 1);
     drawFastHLine(0,20,200,ST7735_WHITE);
 }
+void drawFooterCommands(const char *commands){
+    drawText(5, 113, commands, ST7735_WHITE, ST7735_BLACK, 1);
+    drawFastHLine(0,108,200,ST7735_WHITE);
+}
+
+void drawError(int ErrCode){
+    clearScreen();
+    switch(ErrCode){
+        case 0: //No SD Card
+            drawText(5, 5, "     Critical Error!     ", ST7735_RED, ST7735_BLACK, 1);
+            drawFastHLine(0,20,200,ST7735_RED);
+            drawText(5, 37, "Unable to Mount SD Card", ST7735_RED, ST7735_BLACK, 1);
+            drawText(5, 49, "Possible Issues:", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 61, "- Faulty / No SD Card", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 73, "- Faulty Wiring", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 85, "- Faulty SD Formating", ST7735_WHITE, ST7735_BLACK, 1);
+            drawFastHLine(0,108,200,ST7735_RED);
+            drawText(5, 113, "Git Wiki: Troubleshoot SD", ST7735_RED, ST7735_BLACK, 1);
+            break;
+    }
+}
+
+void drawMenu(int sel){
+    clearScreen();
+    drawFooterCommands(" <>  <v>  <SEL>  <^>  <> ");
+    switch(sel){
+        case 0: //Skylanders
+            drawHeader("       Skylanders        ");
+            break;
+        case 1: //Lego Dimensions
+            drawHeader("     Lego Dimensions     ");
+            break;
+        case 2: //Disney Infinity
+            drawHeader("     Disney Infinity     ");
+            break;
+        case 3: //WiFi Menu
+            drawHeader("        WiFi  Menu       ");
+            break;
+    }
+}
 
 void drawInitMenu(int sel){
+
     switch(sel){
         case 0:
             DeviceNum = 0;
@@ -70,7 +111,3 @@ void drawInitSelect(){
      drawInitMenu(0);
 }
 
-void drawFooterCommands(const char *commands){
-    drawText(5, 113, commands, ST7735_WHITE, ST7735_BLACK, 1);
-    drawFastHLine(0,108,200,ST7735_WHITE);
-}

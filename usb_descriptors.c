@@ -67,7 +67,7 @@ tusb_desc_device_t const desc_device2 =
 
     .iManufacturer      = 0x01,
     .iProduct           = 0x02,
-    .iSerialNumber      = 0x00,
+    .iSerialNumber      = 0x03,
 
     .bNumConfigurations = 0x01
 // 18 bytes
@@ -274,7 +274,8 @@ char const* string_desc_arr2 [] =
   "PDP LIMITED.",                     // 1: Manufacturer
   "LEGO READER V2.10",//"Spyro Portal",              // 2: Product                      
   //"0123456789",
-  "P.D.P.000000"               // 3: Serials, should use chip ID
+  "P.D.P.000000",
+  "HID"               // 3: Serials, should use chip ID
 };
 static uint16_t _desc_str[32];
 
