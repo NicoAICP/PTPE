@@ -25,3 +25,22 @@ CS -> GP9 (Pin 12)
 LED -> 3.3V (Pin 36)  
 GND -> GND (Pin 38)  
 VCC -> 5V (Pin 40)
+
+## Connecting a SD Card Reader
+SD_CS -> GP5 (Pin 7)  
+SD_MOSI -> GP3 (Pin 5)  
+SD_MISO -> GP4 (Pin 6)  
+SD_SCK -> GP2 (Pin 4)  
+
+##Connecting the Buttons
+You will be needing 5 Buttons  
+- Button1 (Misc 1)  
+GP16 (Pin 21)  
+- Button2 (Left/Down)  
+GP17 (Pin 22)  
+- Button3 (Select)  
+GP18 (Pin 24)  
+- Button4 (Right/Up)  
+GP19 (Pin 25)  
+- Button5 (Misc 2)  
+GP20 (Pin 26)
