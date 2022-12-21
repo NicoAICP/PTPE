@@ -8,8 +8,10 @@
 #include "ST7735_TFT.h"
 #include "bsp/board.h"
 #include "tusb.h"
+
 #include "pico/cyw43_arch.h"
 #include "usb_descriptors.h"
+#include "hardware/watchdog.h"
 
 #include "rtc.h"
 #include "f_util.h"
@@ -58,6 +60,104 @@ void init_buttons(){
   gpio_pull_up(BUTTON_MISC2);
 }
 
+void reboot(){
+    clearScreen();
+    sleep_ms(500);
+    watchdog_enable(1, 1);
+    while(1);
+}
+
+void handleWifi(){
+    drawWifiMenu(0);
+    int wifiSel = 0;
+    int Selected = 0;
+
+    while(Selected == 0)
+    {
+        if (!gpio_get(BUTTON_LEFT))
+        {
+            if(wifiSel < 4){
+                wifiSel++;
+            }
+            drawWifiMenu(wifiSel);
+        }
+        else if (!gpio_get(BUTTON_SELECT))
+        {
+            Selected = 1;
+        }
+        else if (!gpio_get(BUTTON_RIGHT))
+        {
+             if(wifiSel > 0){
+                wifiSel--;
+            }
+            drawWifiMenu(wifiSel);
+        }
+        
+    }
+    
+    FRESULT res;
+    DIR dir;
+    FILINFO fno;
+    FIL fp;
+    
+    switch(wifiSel){
+        case 0:
+            f_opendir(&dir, "/"); // Open Root
+            res = f_open(&fp, "config.ptpe", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+            int i = f_puts("[CONFIG_WIFI];WIFI_SSID=;WIFI_PASS=;",&fp);
+            f_close(&fp);
+            drawSetupMenu(1);
+            while(1)
+            {
+                if(!gpio_get(BUTTON_SELECT))
+                {
+                    reboot();
+                }
+            }
+            break;
+        case 1:
+            //TODO: Connect to Wifi
+            f_opendir(&dir, "/"); // Open Root
+            res = f_open(&fp, "config.ptpe", FA_READ);
+            if(res){
+                //Throw Error Screen
+            }
+            TCHAR buff;
+            char *pre_ssid;
+            char *pre_pass;
+            char *ssid;
+            char *pass;
+            f_gets(&buff, 1000, &fp);
+            f_close(&fp);
+            
+            strtok(&buff,";");
+            pre_ssid = strtok(NULL,";");
+            pre_pass = strtok(NULL,";");
+            
+            strtok(pre_ssid, "=");
+            ssid = strtok(NULL,"=");
+
+            strtok(pre_pass, "=");
+            pass = strtok(NULL,"=");
+
+            //implement connect to wifi
+
+            handleWifi();
+            
+            break;
+        case 2:
+            //TODO: TCP Transfer Server
+            //opens a tcp transfer server to recieve Files
+            reboot();
+            break;
+        case 3:
+            reboot();
+            break;
+    }
+}
+
+
+
 // ---------------------------------------------------------------------------
 int main() {
 
@@ -86,6 +186,8 @@ int main() {
     int currSel = 0;
     int maxSel = 2;
 
+    drawHeader("        INIT PTPE        ");
+
     if(WifiAllowed == 1){
         maxSel = 3;
     }
@@ -96,9 +198,14 @@ int main() {
     if (FR_OK != fr)
     {
         drawError(0);
-        while(true);
+        while(true){
+           if (!gpio_get(BUTTON_SELECT))
+            {
+                reboot();
+            }    
+        };
     }
-
+    clearScreen();
     drawHeader("  Pico Toy Pad Emulator  ");
     drawInitSelect();
     drawFooterCommands(" <>  <v>  <SEL>  <^>  <> ");
@@ -129,20 +236,24 @@ int main() {
 
     drawMenu(currSel);
 
-    void hid_task(void);
-
-    if(DeviceNum != 3 && DeviceNum != 2) //IF DeviceNum == 3 then we selected wifi menu (Num2 disabled since no Disney support)
-    {   
-        //TINY USB INIT 
-        board_init();
-        tud_init(0);
-
-        while(1){
-            tud_task();
-        }
+    if(DeviceNum == 3){
+        handleWifi();
     }
+
+    void hid_task(void);    
+    
+    
+    //TINY USB INIT 
+    board_init();
+    tud_init(0);
+
+    while(1){
+        tud_task();
+    }
+    
     return 0;
 }
+
 
 //--------------------------------------------------------------------+
 // Device callbacks
