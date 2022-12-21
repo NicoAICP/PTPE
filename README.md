@@ -14,10 +14,10 @@ Replace the ST7735_TFT.c in pico-st7735/lib-st7735/src with the one in the root 
 This is needed for the display to display text correctly!
 
 IMPORTANT #2!  
-You need to copy the tusb_config.h into this location <pico-sdk-location>\lib\tinyusb\src\tusb_config.h
+You need to copy the tusb_config.h into this location pico-sdk-location\lib\tinyusb\src\tusb_config.h
 
 IMPORTANT #3!  
-You need to copy the lwipopts.h into this location <pico-sd-location>\lib\lwip\src\include\lwip\lwipopts.h  
+You need to copy the lwipopts.h into this location pico-sd-location\lib\lwip\src\include\lwip\lwipopts.h  
 
 
 ## Connecting the LCD:
