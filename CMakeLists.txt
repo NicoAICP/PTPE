@@ -79,7 +79,7 @@ target_link_libraries(
         PUBLIC 
         pico_stdlib tinyusb_device tinyusb_board hardware_i2c hardware_gpio
         hardware_spi
-        pico_cyw43_arch_none
+        pico_cyw43_arch_lwip_threadsafe_background
         st7735
         FatFs_SPI
 )
