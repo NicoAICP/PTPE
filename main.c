@@ -18,6 +18,11 @@
 #include "ff.h"
 #include "hw_config.h"
 
+#include "lwip/ip_addr.h"
+#include "lwip/netif.h"
+#include "lwip/pbuf.h"
+#include "lwip/tcp.h"
+
 #define PicoW 1
 #define BUTTON_MISC1 16
 #define BUTTON_LEFT 17
@@ -68,6 +73,11 @@ void reboot(){
 }
 
 void handleWifi(){
+    if(Connected == 1){
+        char text[26];
+        sprintf(text," Pico IP: %s",ip4addr_ntoa(netif_ip4_addr(netif_list)));
+        drawIPHeader(text);
+    }
     drawWifiMenu(0);
     int wifiSel = 0;
     int Selected = 0;
@@ -120,7 +130,14 @@ void handleWifi(){
             f_opendir(&dir, "/"); // Open Root
             res = f_open(&fp, "config.ptpe", FA_READ);
             if(res){
-                //Throw Error Screen
+                drawError(1);
+                while(1)
+                {   
+                    if(!gpio_get(BUTTON_SELECT))
+                    {
+                        reboot();
+                    }
+                }
             }
             TCHAR buff;
             char *pre_ssid;
@@ -140,15 +157,33 @@ void handleWifi(){
             strtok(pre_pass, "=");
             pass = strtok(NULL,"=");
 
-            //implement connect to wifi
-
+            cyw43_arch_enable_sta_mode();
+            int err = cyw43_arch_wifi_connect_timeout_ms(ssid, pass, CYW43_AUTH_WPA2_AES_PSK, 20000);
+            if (err != 0) {
+                drawError(2);
+                while(1)
+                {   
+                    if(!gpio_get(BUTTON_SELECT))
+                    {
+                        reboot();
+                    }
+                }
+            }
+            Connected = 1;
             handleWifi();
             
             break;
         case 2:
             //TODO: TCP Transfer Server
             //opens a tcp transfer server to recieve Files
-            reboot();
+            drawError(99); //ERROR FOR NOT IMPLEMENTED
+            while(1)
+            {   
+                if(!gpio_get(BUTTON_SELECT))
+                {
+                    reboot();
+                }
+            }
             break;
         case 3:
             reboot();

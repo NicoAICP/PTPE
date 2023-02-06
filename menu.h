@@ -1,6 +1,7 @@
 void initScreen();
 void clearScreen();
 void drawHeader(const char *);
+void drawIPHeader(const char *);
 void drawInitMenu(int);
 void drawWifiMenu(int);
 void drawMenu(int);

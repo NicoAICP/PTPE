@@ -18,6 +18,10 @@ void drawHeader(const char *current_header){
     drawText(5, 5, current_header, ST7735_WHITE, ST7735_BLACK, 1);
     drawFastHLine(0,20,200,ST7735_WHITE);
 }
+void drawIPHeader(const char *current_header){
+    drawText(5, 5, current_header, ST7735_GREEN, ST7735_BLACK, 1);
+    drawFastHLine(0,20,200,ST7735_WHITE);
+}
 void drawFooterCommands(const char *commands){
     drawText(5, 113, commands, ST7735_WHITE, ST7735_BLACK, 1);
     drawFastHLine(0,108,200,ST7735_WHITE);
@@ -37,6 +41,41 @@ void drawError(int ErrCode){
             drawText(5, 97, "Press SELECT to Reboot", ST7735_WHITE, ST7735_BLACK, 1);
             drawFastHLine(0,108,200,ST7735_RED);
             drawText(5, 113, "Git Wiki: Troubleshoot SD", ST7735_RED, ST7735_BLACK, 1);
+            break;
+        case 1: //No Config
+            drawText(5, 5, "     Critical Error!     ", ST7735_RED, ST7735_BLACK, 1);
+            drawFastHLine(0,20,200,ST7735_RED);
+            drawText(5, 25, "Unable to Read Config", ST7735_RED, ST7735_BLACK, 1);
+            drawText(5, 37, "Possible Issues:", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 49, "- Faulty / No SD Card", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 61, "- Setup WiFi wasn't used", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 73, "- No config.ptpe on SD", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 97, "Press SELECT to Reboot", ST7735_WHITE, ST7735_BLACK, 1);
+            drawFastHLine(0,108,200,ST7735_RED);
+            drawText(5, 113, "Git Wiki: WiFi Config", ST7735_RED, ST7735_BLACK, 1);
+            break;
+        case 2: //WiFi Failed
+            drawText(5, 5, "     Critical Error!     ", ST7735_RED, ST7735_BLACK, 1);
+            drawFastHLine(0,20,200,ST7735_RED);
+            drawText(5, 25, "Unable to Connect to WiFi", ST7735_RED, ST7735_BLACK, 1);
+            drawText(5, 37, "Possible Issues:", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 49, "- Wrong SSID or Password", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 61, "- WiFi doesn't use WPA2", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 73, "- Not close enough to AP", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 97, "Press SELECT to Reboot", ST7735_WHITE, ST7735_BLACK, 1);
+            drawFastHLine(0,108,200,ST7735_RED);
+            drawText(5, 113, "Git Wiki: WiFi Con Failed", ST7735_RED, ST7735_BLACK, 1);
+            break;
+        case 99: //Not Implemented
+            drawText(5, 5, "     Critical Error!     ", ST7735_RED, ST7735_BLACK, 1);
+            drawFastHLine(0,20,200,ST7735_RED);
+            drawText(5, 25, "Feature isnt Implemented", ST7735_RED, ST7735_BLACK, 1);
+            drawText(5, 37, "Possible Issues:", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 49, "- PTPE is not up to date", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 61, "- Feature is not finished", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 97, "Press SELECT to Reboot", ST7735_WHITE, ST7735_BLACK, 1);
+            drawFastHLine(0,108,200,ST7735_RED);
+            drawText(5, 113, "Git Wiki: Not Implemented", ST7735_RED, ST7735_BLACK, 1);
             break;
     }
 }
