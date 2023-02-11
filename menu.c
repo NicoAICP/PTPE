@@ -69,7 +69,7 @@ void drawError(int ErrCode){
         case 99: //Not Implemented
             drawText(5, 5, "     Critical Error!     ", ST7735_RED, ST7735_BLACK, 1);
             drawFastHLine(0,20,200,ST7735_RED);
-            drawText(5, 25, "Feature isnt Implemented", ST7735_RED, ST7735_BLACK, 1);
+            drawText(5, 25, "Feature isn't Implemented", ST7735_RED, ST7735_BLACK, 1);
             drawText(5, 37, "Possible Issues:", ST7735_WHITE, ST7735_BLACK, 1);
             drawText(5, 49, "- PTPE is not up to date", ST7735_WHITE, ST7735_BLACK, 1);
             drawText(5, 61, "- Feature is not finished", ST7735_WHITE, ST7735_BLACK, 1);

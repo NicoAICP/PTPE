@@ -191,7 +191,11 @@ void handleWifi(){
     }
 }
 
-
+bool StartsWith(const char *a, const char *b)
+{
+   if(strncmp(a, b, strlen(b)) == 0) return 1;
+   return 0;
+}
 
 // ---------------------------------------------------------------------------
 int main() {
@@ -214,7 +218,9 @@ int main() {
 #elif defined(TFT_ENABLE_GENERIC)
     TFT_ST7735B_Initialize();
 #endif
-    DeviceNum = 1; //TODO: ADD TO SELECTION
+
+    //INIT PTPE     
+    DeviceNum = 1;
     initScreen();
     clearScreen();
 
@@ -240,6 +246,33 @@ int main() {
             }    
         };
     }
+
+    //Create Folders for PTPE to read dumps from.
+    DIR dir;
+    int ins = 25;
+    FRESULT res = f_opendir(&dir, "/");                       /* Open SD Root */
+    res = f_mkdir("Skylanders");
+    if(res == FR_OK)
+    {
+        drawText(5, ins, "Created Skylanders Folder", ST7735_WHITE, ST7735_BLACK, 1);
+        ins = ins+12;
+    }
+    res = f_mkdir("Dimensions");
+    if(res == FR_OK)
+    {
+        drawText(5, ins, "Created Dimensions Folder", ST7735_WHITE, ST7735_BLACK, 1);
+        ins = ins+12;
+    }
+    res = f_mkdir("Infinity");
+    if(res == FR_OK)
+    {
+       
+        drawText(5, ins, "Created Infinity Folder", ST7735_WHITE, ST7735_BLACK, 1);
+        ins = ins+12;
+    }
+    f_closedir(&dir);
+    //END INIT
+    
     clearScreen();
     drawHeader("  Pico Toy Pad Emulator  ");
     drawInitSelect();
