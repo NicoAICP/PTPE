@@ -9,7 +9,7 @@
 #include "bsp/board.h"
 #include "tusb.h"
 
-#include "pico/cyw43_arch.h"
+
 #include "usb_descriptors.h"
 #include "hardware/watchdog.h"
 
@@ -18,6 +18,8 @@
 #include "ff.h"
 #include "hw_config.h"
 
+//Comment out if Pico Non W
+#include "pico/cyw43_arch.h"
 #include "lwip/ip_addr.h"
 #include "lwip/netif.h"
 #include "lwip/pbuf.h"
@@ -72,7 +74,7 @@ void reboot(){
     while(1);
 }
 
-void handleWifi(){
+void handleWifi(){ //comment out this content if compiling for Pico non W
     if(Connected == 1){
         char text[26];
         sprintf(text," Pico IP: %s",ip4addr_ntoa(netif_ip4_addr(netif_list)));

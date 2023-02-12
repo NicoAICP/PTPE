@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 include(pico_sdk_import.cmake)
-set(PICO_BOARD pico_w)
+set(PICO_BOARD pico_w) #needs to be commented out when compiling for PICO non W boards
+#set(PICO_BOARD pico) #needs to be commented out when compiling for PICO W boards
 project(ptpe C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
@@ -79,7 +80,7 @@ target_link_libraries(
         PUBLIC 
         pico_stdlib tinyusb_device tinyusb_board hardware_i2c hardware_gpio
         hardware_spi
-        pico_cyw43_arch_lwip_threadsafe_background
+        pico_cyw43_arch_lwip_threadsafe_background #needs to be commented out when compiling for PICO non W boards
         st7735
         FatFs_SPI
 )
