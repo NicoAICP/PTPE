@@ -37,7 +37,7 @@
 
 void init_hw() {
   stdio_init_all();
-  spi_init(SPI_PORT, 20000000);                // SPI with 20Mhz
+  spi_init(SPI_PORT, 25000000);                // SPI with 20Mhz
   gpio_set_function(SPI_RX, GPIO_FUNC_SPI);
   gpio_set_function(SPI_SCK,GPIO_FUNC_SPI);
   gpio_set_function(SPI_TX, GPIO_FUNC_SPI);
