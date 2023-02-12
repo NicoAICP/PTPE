@@ -18,7 +18,7 @@
 #include "ff.h"
 #include "hw_config.h"
 
-//Comment out if Pico Non W
+
 #include "pico/cyw43_arch.h"
 #include "lwip/ip_addr.h"
 #include "lwip/netif.h"
@@ -37,7 +37,7 @@
 
 void init_hw() {
   stdio_init_all();
-  spi_init(SPI_PORT, 1000000);                // SPI with 1Mhz
+  spi_init(SPI_PORT, 20000000);                // SPI with 20Mhz
   gpio_set_function(SPI_RX, GPIO_FUNC_SPI);
   gpio_set_function(SPI_SCK,GPIO_FUNC_SPI);
   gpio_set_function(SPI_TX, GPIO_FUNC_SPI);
@@ -69,12 +69,13 @@ void init_buttons(){
 
 void reboot(){
     clearScreen();
-    sleep_ms(500);
+    sleep_ms(100);
     watchdog_enable(1, 1);
+    watchdog_reboot(0,0,1);
     while(1);
 }
 
-void handleWifi(){ //comment out this content if compiling for Pico non W
+void handleWifi(){
     if(Connected == 1){
         char text[26];
         sprintf(text," Pico IP: %s",ip4addr_ntoa(netif_ip4_addr(netif_list)));
@@ -88,10 +89,11 @@ void handleWifi(){ //comment out this content if compiling for Pico non W
     {
         if (!gpio_get(BUTTON_LEFT))
         {
-            if(wifiSel < 4){
+            if(wifiSel < 3){
                 wifiSel++;
             }
             drawWifiMenu(wifiSel);
+            sleep_ms(100);
         }
         else if (!gpio_get(BUTTON_SELECT))
         {
@@ -102,6 +104,7 @@ void handleWifi(){ //comment out this content if compiling for Pico non W
              if(wifiSel > 0){
                 wifiSel--;
             }
+            sleep_ms(100);
             drawWifiMenu(wifiSel);
         }
         
@@ -111,7 +114,6 @@ void handleWifi(){ //comment out this content if compiling for Pico non W
     DIR dir;
     FILINFO fno;
     FIL fp;
-    
     switch(wifiSel){
         case 0:
             f_opendir(&dir, "/"); // Open Root
@@ -128,7 +130,6 @@ void handleWifi(){ //comment out this content if compiling for Pico non W
             }
             break;
         case 1:
-            //TODO: Connect to Wifi
             f_opendir(&dir, "/"); // Open Root
             res = f_open(&fp, "config.ptpe", FA_READ);
             if(res){
@@ -204,13 +205,12 @@ int main() {
 
     init_hw();
     init_buttons();
-//This code snippet will only be called if PicoW is set to 1. There will be a Wifi and a no Wifi build
+//If using a Pico non W board please change line 28 so that PicoW is equal to 0
 #if PicoW == 1
     if( cyw43_arch_init() == 0){
         WifiAllowed = 1;
     };
 #endif
-
 #ifdef TFT_ENABLE_BLACK
     TFT_BlackTab_Initialize();
 #elif defined(TFT_ENABLE_GREEN)
@@ -288,17 +288,20 @@ int main() {
             if(currSel < maxSel){
                 currSel++;
             }
+            sleep_ms(100);
             drawInitMenu(currSel);
         }
         else if (!gpio_get(BUTTON_SELECT))
         {
             Selected = 1;
+            sleep_ms(100);
         }
         else if (!gpio_get(BUTTON_RIGHT))
         {
              if(currSel > 0){
                 currSel--;
             }
+            sleep_ms(100);
             drawInitMenu(currSel);
         }
         
