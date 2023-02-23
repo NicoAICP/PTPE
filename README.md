@@ -9,7 +9,7 @@
     cmake ..
     make
 
-IMPORTANT! 
+IMPORTANT!  
 You **need** a Pi PICO SDK Version of atleast 1.4.0 but you cannot use 1.5.0 or higher. I recommend using 1.4.0
 
 IMPORTANT #2!  
