@@ -1,0 +1,38 @@
+{
+  "build_type": {
+    "default": "Debug",
+    "description": "The CMake build type to use",
+    "choices": {
+      "Debug": {
+        "short": "Debug",
+        "long": "Disables optimizations and includes debug info.",
+        "buildType": "Debug"
+      },
+      "Release": {
+        "short": "Release",
+        "long": "Includes optimizations but no debug info.",
+        "buildType": "Release"
+      }
+    }
+  },
+  "fonts": {
+    "default": "no",
+    "description": "test glyph-fonts",
+    "choices": {
+      "no": {
+        "short": "standard font",
+        "long": "test with standard font",
+        "settings": {
+          "ENABLE_FONTS": "false"
+        }
+      },
+      "yes": {
+        "short": "glyph-fonts",
+        "long": "test with glyph-fonts",
+        "settings": {
+          "ENABLE_FONTS": "true"
+        }
+      }
+    }
+  }
+}

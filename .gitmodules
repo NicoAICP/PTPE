@@ -1,6 +1,6 @@
 [submodule "pico-st7735"]
 	path = pico-st7735
-	url = https://github.com/bablokb/pico-st7735/
+	url = https://github.com/bablokb/pico-st7735.git
 [submodule "no-OS-FatFS-SD-SPI-RPi-Pico"]
 	path = no-OS-FatFS-SD-SPI-RPi-Pico
-	url = https://github.com/amadeoestrada/no-OS-FatFS-SD-SPI-RPi-Pico
+	url = https://github.com/amadeoestrada/no-OS-FatFS-SD-SPI-RPi-Pico.git

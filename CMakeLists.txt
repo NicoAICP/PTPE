@@ -1,16 +1,18 @@
+# Generated Cmake Pico project file
+
 cmake_minimum_required(VERSION 3.13)
-include(pico_sdk_import.cmake)
-set(PICO_BOARD pico_w)
-project(ptpe C CXX ASM)
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
-if (PICO_SDK_VERSION_STRING VERSION_LESS "1.3.0")
-    message(FATAL_ERROR "Raspberry Pi Pico SDK version 1.3.0 (or later) required. Your version is ${PICO_SDK_VERSION_STRING}")
-endif()
+# initalize pico_sdk from installed location
+# (note this can come from environment, CMake cache etc)
+#set(PICO_SDK_PATH "/data/pico/pico-sdk")
 
+# Pull in Raspberry Pi Pico SDK (must be before project)
+include(pico_sdk_import.cmake)
 
-# Initialize the SDK
+project(ptpe C CXX ASM)
 pico_sdk_init()
 
 # library configuration (override if necessary, see pico-st7735 for a complete list)
@@ -18,9 +20,9 @@ set(SPI_TFT_PORT "spi1" CACHE STRING "TFT spi port-name")
 set(SPI_TFT_CS   "9"    CACHE STRING "TFT CS  pin number")
 set(SPI_TFT_DC   "10"   CACHE STRING "TFT DC  pin number")
 set(SPI_TFT_RST  "11"   CACHE STRING "TFT RST pin number")
-set(TFT_OPTIONS TFT_ENABLE_ALL
-            CACHE STRING "TFT options/functions") #RED TFT_ENABLE_RESET TFT_ENABLE_TEXT TFT_ENABLE_SHAPES
-                #TFT_ENABLE_ROTATE TFT_ENABLE_SCROLL
+set(TFT_OPTIONS TFT_ENABLE_BLACK TFT_ENABLE_RESET TFT_ENABLE_TEXT TFT_ENABLE_SHAPES
+                TFT_ENABLE_ROTATE TFT_ENABLE_SCROLL
+            CACHE STRING "TFT options/functions")
 
 #program configuration
 set(SPI_PORT "spi1" CACHE STRING "spi port-name")
@@ -55,36 +57,23 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 else()
 endif()
-set(INCLUDE_DIR /libs)
-include_directories (${INCLUDE_DIR})
-add_executable(PTPE
-        main.c
-        )
 
-target_sources(PTPE PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR}/main.c
-        ${CMAKE_CURRENT_LIST_DIR}/menu.c
-        ${CMAKE_CURRENT_LIST_DIR}/shared.c
-        ${CMAKE_CURRENT_LIST_DIR}/usb_descriptors.c
-        ${CMAKE_CURRENT_LIST_DIR}/hw_config.c
-        )
-add_subdirectory(no-OS-FatFS-SD-SPI-RPi-Pico/FatFs_SPI build)
-add_subdirectory(pico-st7735)       
-#add_subdirectory(lib/no-OS-FatFS-SD-SPI-RPi-Pico/FatFs_SPI build)
-#include_directories(lib/openssl/include )
+add_executable(${PROJECT_NAME} main.c shared.c menu.c)
 
-# pull in common dependencies 
-target_link_libraries(
-        PTPE 
-        PUBLIC 
-        pico_stdlib tinyusb_device tinyusb_board hardware_i2c hardware_gpio
-        hardware_spi
-        pico_cyw43_arch_lwip_threadsafe_background 
-        st7735
-        FatFs_SPI
+pico_enable_stdio_uart(${PROJECT_NAME} 1)
+pico_enable_stdio_usb(${PROJECT_NAME} 0)
+
+pico_set_program_name(${PROJECT_NAME} "ptpe")
+pico_set_program_version(${PROJECT_NAME} "0.1")
+
+# build the st7735-library from our submodule
+add_subdirectory(pico-st7735)
+
+# add libraries
+target_link_libraries(${PROJECT_NAME}
+  pico_stdlib
+  hardware_spi
+  st7735
 )
 
-# Tell CMake where to find other source code
-
-# create map/bin/hex/uf2 file etc.
-pico_add_extra_outputs(PTPE)
+pico_add_extra_outputs(${PROJECT_NAME})
