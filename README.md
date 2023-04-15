@@ -9,17 +9,15 @@
     cmake ..
     make
 
-IMPORTANT!  
-You **need** a Pi PICO SDK Version of atleast 1.4.0 but you cannot use 1.5.0 or higher. I recommend using 1.4.0
 
-IMPORTANT #2!  
+IMPORTANT #!  
 Replace the ST7735_TFT.c in pico-st7735/lib-st7735/src with the one in the root of this project.  
 This is needed for the display to display text correctly!
 
-IMPORTANT #3!  
+IMPORTANT #2!  
 You need to copy the tusb_config.h into this location pico-sdk-location\lib\tinyusb\src\tusb_config.h
 
-IMPORTANT #4!  
+IMPORTANT #3!  
 You need to copy the lwipopts.h into this location pico-sdk-location\lib\lwip\src\include\lwip\lwipopts.h  
 
 

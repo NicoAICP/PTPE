@@ -6,5 +6,10 @@
               },    "launch" : {
       "visibility": "hidden"
                },
-     },
+    },
+    "files.associations": {
+      "rtc.h": "c",
+      "ff.h": "c",
+      "spi.h": "c"
+    },
 }

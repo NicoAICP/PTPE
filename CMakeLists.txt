@@ -1,7 +1,7 @@
 # Generated Cmake Pico project file
 
 cmake_minimum_required(VERSION 3.13)
-
+set(PICO_BOARD pico_w)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -57,8 +57,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 else()
 endif()
-
-add_executable(${PROJECT_NAME} main.c shared.c menu.c)
+add_subdirectory(FatFs_SPI build)
+add_executable(${PROJECT_NAME} main.c shared.c menu.c hw_config.c sdmenu.c usb_descriptors.c)
 
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
@@ -71,9 +71,11 @@ add_subdirectory(pico-st7735)
 
 # add libraries
 target_link_libraries(${PROJECT_NAME}
-  pico_stdlib
+  pico_stdlib tinyusb_device tinyusb_board hardware_i2c hardware_gpio
   hardware_spi
+  pico_cyw43_arch_lwip_threadsafe_background 
   st7735
+  FatFs_SPI
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})
