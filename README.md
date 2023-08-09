@@ -1,4 +1,5 @@
-# PTPE
+# PTPE 
+Don't worry, PTPE is not dead, i just haven't coded in a while due to burnout.
 ## Building
 
     git clone https://github.com/NicoAICP/PTPE.git
