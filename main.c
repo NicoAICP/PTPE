@@ -29,13 +29,7 @@
 #define BUTTON_MISC2 20
 
 
-void reboot(){
-    clearScreen();
-    sleep_ms(100);
-    watchdog_enable(1, 1);
-    watchdog_reboot(0,0,1);
-    while(1);
-}
+
 void init_hw() {
   stdio_init_all();
   spi_init(SPI_PORT, 25000000);                // SPI with 1Mhz
@@ -251,8 +245,8 @@ int main() {
 #endif
 
   DeviceNum = 1;
-  int currSel = 0;
-  int maxSel = 2;
+  currSel = 0;
+  maxSel = 2;
 
 #if PicoW == 1
   maxSel = 3;
@@ -302,17 +296,40 @@ int main() {
       handleWifi();
   }
 
-
-  sdCardMenu();
+  setupMenu(currSel);
+ 
   void hid_task(void);    
     
-    
+  
   //TINY USB INIT 
   board_init();
   tud_init(0);
 
+
+
   while(1){
     tud_task();
+    if (!gpio_get(BUTTON_LEFT))
+        {
+            if(currSel < maxSel){
+                currSel++;
+            }
+            sleep_ms(300);
+            handleMenu(currSel, 0);
+        }
+        else if (!gpio_get(BUTTON_SELECT))
+        {
+            handleMenu(currSel, 1);
+            sleep_ms(300);
+        }
+        else if (!gpio_get(BUTTON_RIGHT))
+        {
+             if(currSel > 0){
+                currSel--;
+            }
+            sleep_ms(300);
+            handleMenu(currSel, 0);
+        }
   }
     
   return 0;

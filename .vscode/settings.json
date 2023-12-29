@@ -10,6 +10,8 @@
     "files.associations": {
       "rtc.h": "c",
       "ff.h": "c",
-      "spi.h": "c"
+      "spi.h": "c",
+      "shared.h": "c",
+      "cyw43_arch.h": "c"
     },
 }

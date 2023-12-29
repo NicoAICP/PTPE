@@ -1,7 +1,9 @@
+#include "Skylanders.h"
 #include "hw.h"
 #include "shared.h"
 #include <stdio.h>
 #include "ST7735_TFT.h"
+
 
 void initScreen(){
     //setTextWrap(true);
@@ -66,6 +68,17 @@ void drawError(int ErrCode){
             drawFastHLine(0,108,200,ST7735_RED);
             drawText(5, 113, "Git Wiki: WiFi Con Failed", ST7735_RED, ST7735_BLACK, 1);
             break;
+        case 98: //Not Implemented
+            drawText(5, 5, "     Critical Error!     ", ST7735_RED, ST7735_BLACK, 1);
+            drawFastHLine(0,20,200,ST7735_RED);
+            drawText(5, 25, "Feature isn't Implemented", ST7735_RED, ST7735_BLACK, 1);
+            drawText(5, 37, "Possible Issues:", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 49, "- PTPE is not up to date", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 61, "- Feature is not finished", ST7735_WHITE, ST7735_BLACK, 1);
+            drawText(5, 97, "Rebooting in 10 Seconds", ST7735_WHITE, ST7735_BLACK, 1);
+            drawFastHLine(0,108,200,ST7735_RED);
+            drawText(5, 113, "Git Wiki: Not Implemented", ST7735_RED, ST7735_BLACK, 1);
+            break;
         case 99: //Not Implemented
             drawText(5, 5, "     Critical Error!     ", ST7735_RED, ST7735_BLACK, 1);
             drawFastHLine(0,20,200,ST7735_RED);
@@ -76,7 +89,7 @@ void drawError(int ErrCode){
             drawText(5, 97, "Press SELECT to Reboot", ST7735_WHITE, ST7735_BLACK, 1);
             drawFastHLine(0,108,200,ST7735_RED);
             drawText(5, 113, "Git Wiki: Not Implemented", ST7735_RED, ST7735_BLACK, 1);
-            break;
+            break;    
     }
 }
 
@@ -104,6 +117,7 @@ void drawMenu(int sel){
             drawHeader("       Skylanders        ");
             break;
         case 1: //Lego Dimensions
+
             drawHeader("     Lego Dimensions     ");
             break;
         case 2: //Disney Infinity
@@ -114,6 +128,42 @@ void drawMenu(int sel){
             break;
     }
 }
+
+void handleMenu(int cursor, int select){
+    switch(DeviceNum){
+        case 0: 
+            SkylanderMenu(cursor, select);
+            break;
+        case 1:
+            //unimplemented LEGO
+            break;
+        case 2:
+            //unimplemented DISNEY
+            break;
+    }
+}
+
+
+void setupMenu(int sel){
+   switch(sel){
+    case 0: //Skylanders
+            currSel = 0;
+            maxSel = 2;
+            handleMenu(0, 0);
+        break;
+    case 1: //Lego Dimensions
+            drawError(98);
+            sleep_ms(10000);
+            reboot();
+        break;
+    case 2: //Disney Infinity
+            drawError(98);
+            sleep_ms(10000);
+            reboot();
+        break;
+   } 
+}
+
 
 void drawInitMenu(int sel){
     switch(sel){

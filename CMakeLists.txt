@@ -58,7 +58,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
 endif()
 add_subdirectory(FatFs_SPI build)
-add_executable(${PROJECT_NAME} main.c shared.c menu.c hw_config.c sdmenu.c usb_descriptors.c)
+add_executable(${PROJECT_NAME} main.c shared.c menu.c hw_config.c sdmenu.c usb_descriptors.c Skylanders.c)
 
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
 pico_enable_stdio_usb(${PROJECT_NAME} 0)

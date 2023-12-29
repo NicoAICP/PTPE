@@ -10,3 +10,5 @@ void drawSetupMenu(int);
 void drawInitSelect();
 void drawPressed(int);
 void drawFooterCommands(const char *);
+void setupMenu(int);
+void handleMenu(int, int);
