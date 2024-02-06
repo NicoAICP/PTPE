@@ -13,7 +13,7 @@ If you want to support this Project, feel free to do so on Ko-Fi https://ko-fi.c
     make
 
 IMPORTANT!  
-You **need** a Pi PICO SDK Version of atleast 1.4.0 but you cannot use 1.5.0 or higher. I recommend using 1.4.0
+You **need** a Pi PICO SDK Version of atleast 1.4.0 but you cannot use 1.5.0 or higher. I recommend using 1.4.0   <- This info is false
 
 IMPORTANT #2!  
 Replace the ST7735_TFT.c in pico-st7735/lib-st7735/src with the one in the root of this project.  
