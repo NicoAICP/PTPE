@@ -12,6 +12,9 @@
       "ff.h": "c",
       "spi.h": "c",
       "shared.h": "c",
-      "cyw43_arch.h": "c"
+      "cyw43_arch.h": "c",
+      "st7735_tft.h": "c",
+      "stdio.h": "c",
+      "gpio.h": "c"
     },
 }

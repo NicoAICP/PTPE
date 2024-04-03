@@ -8,6 +8,7 @@ int Connected = 0;
 int SDLines = 25;
 int currSel = 0;
 int maxSel = 2;
+int SkylanderCount = 0;
 
 void reboot(){
     clearScreen();

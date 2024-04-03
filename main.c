@@ -27,7 +27,7 @@
 #define BUTTON_SELECT 18
 #define BUTTON_RIGHT 19
 #define BUTTON_MISC2 20
-
+#define MSG_SIZE 32
 
 
 void init_hw() {
@@ -223,6 +223,7 @@ bool StartsWith(const char *a, const char *b)
    if(strncmp(a, b, strlen(b)) == 0) return 1;
    return 0;
 }
+char sense_counter = 0;
 // ---------------------------------------------------------------------------
 // main loop
 
@@ -305,10 +306,18 @@ int main() {
   board_init();
   tud_init(0);
 
-
+    
+  char *nbuffer;
+            nbuffer = calloc(MSG_SIZE, 1);
+            nbuffer[0] = 0x53;
+            nbuffer[1] = 0x00;
+            nbuffer[5] = sense_counter++;
+            nbuffer[6] = 0x01;
 
   while(1){
-    tud_task();
+     
+    
+    
     if (!gpio_get(BUTTON_LEFT))
         {
             if(currSel < maxSel){
@@ -330,6 +339,7 @@ int main() {
             sleep_ms(300);
             handleMenu(currSel, 0);
         }
+        tud_task();
   }
     
   return 0;
@@ -374,6 +384,73 @@ uint16_t tud_hid_get_report_cb(uint8_t instance, uint8_t report_id, hid_report_t
 // received data on OUT endpoint ( Report ID = 0, Type = 0 )
 void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_t report_type, uint8_t const *buffer, uint16_t bufsize) // Console/ Computer sends data (Query, Shutdown etc.)
 {
- 
+ printf("%X", report_type);
+  if (report_type == HID_REPORT_TYPE_OUTPUT)
+  {
+    // char paddedbuffer[MSG_SIZE] = {0};
+    char *outbuffer;
+    uint actual_len = 0;
+
+    switch (buffer[0]) // Commands we can recieve from the host
+    {
+        case 'R': // 0x52 Reboot/Shutdown Portal
+            printf("Recieved reboot\n");
+            outbuffer = calloc(32, 1);
+            outbuffer[0] = 0x52;
+            outbuffer[1] = 0x02;
+            outbuffer[2] = 0x1b;
+            tud_hid_report(0, outbuffer, 32);
+            break;
+        case 'J':
+            printf("I do not know what it does but something related to sound");
+            outbuffer = calloc(32, 1);
+            outbuffer[0] = buffer[0];
+            tud_hid_report(0, outbuffer, 32);
+            break;
+        case 'M':
+            printf("Activate / Deactivate speaker");
+            outbuffer = calloc(32, 1);
+            outbuffer[0] = buffer[0]; // We only send the command back without any return value, since we do not have a speaker
+            tud_hid_report(0, outbuffer, 32);
+            break;
+        case 'A': // 0x41 Activate Portal
+
+            printf("Recieved activate\n");
+            outbuffer = calloc(32, 1);
+            outbuffer[0] = 0x41;
+            outbuffer[1] = buffer[1];
+            outbuffer[2] = 0xff;
+            outbuffer[3] = 0x77;
+            tud_hid_report(0, outbuffer, 32);
+            break;
+        case 'S': // 0x53 Sense how many Skylanders are on the Portal
+            printf("Recieved sense\n");
+            outbuffer = calloc(32, 1);
+            outbuffer[0] = 0x53;
+            outbuffer[1] = 0x00;
+            // pseudo: outbuffer[2:5] = {0x00} (len = 3)
+            outbuffer[5] = sense_counter++;
+            outbuffer[6] = 0x01;
+            tud_hid_report(0, outbuffer, 32);
+            // free(outbuffer);
+            break;
+        case 'C': // 0x42 Skylander Portal Color
+            printf("Color ");
+            tud_hid_report(0, buffer, bufsize);
+            return;
+            // tud_hid_report(0, buffer, bufsize);
+            break;
+        default:
+            return;
+    }
+
+    printf("Sent: ");
+    for (char *printptr = outbuffer; *printptr != '\0'; printptr++)
+    {
+      printf("%x", *printptr);
+    }
+    printf("\n");
+    free(outbuffer);
+  }
   
 }
