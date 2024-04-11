@@ -130,8 +130,9 @@ void drawMenu(int sel){
 }
 
 void handleMenu(int cursor, int select){
+    
     switch(DeviceNum){
-        case 0: 
+        case 0:          
             SkylanderMenu(cursor, select);
             break;
         case 1:

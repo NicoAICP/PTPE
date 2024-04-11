@@ -21,13 +21,14 @@
 #include "sdmenu.h"
 #include "usb_descriptors.h"
 
+#include "Skylanders.h"
+
 #define PicoW 1
 #define BUTTON_MISC1 16
 #define BUTTON_LEFT 17
 #define BUTTON_SELECT 18
 #define BUTTON_RIGHT 19
 #define BUTTON_MISC2 20
-#define MSG_SIZE 32
 
 
 void init_hw() {
@@ -223,7 +224,7 @@ bool StartsWith(const char *a, const char *b)
    if(strncmp(a, b, strlen(b)) == 0) return 1;
    return 0;
 }
-char sense_counter = 0;
+
 // ---------------------------------------------------------------------------
 // main loop
 
@@ -308,7 +309,7 @@ int main() {
 
     
   char *nbuffer;
-            nbuffer = calloc(MSG_SIZE, 1);
+            nbuffer = calloc(SKYLANDER_MSG_SIZE, 1);
             nbuffer[0] = 0x53;
             nbuffer[1] = 0x00;
             nbuffer[5] = sense_counter++;
@@ -389,6 +390,8 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_
   {
     // char paddedbuffer[MSG_SIZE] = {0};
     char *outbuffer;
+    char *midbuffer;
+    FIL *curfile;
     uint actual_len = 0;
 
     switch (buffer[0]) // Commands we can recieve from the host
@@ -427,7 +430,7 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_
             printf("Recieved sense\n");
             outbuffer = calloc(32, 1);
             outbuffer[0] = 0x53;
-            outbuffer[1] = 0x00;
+            outbuffer[1] = create_sense_bitmask(loaded_skylanders, MAX_SKYLANDER_COUNT);
             // pseudo: outbuffer[2:5] = {0x00} (len = 3)
             outbuffer[5] = sense_counter++;
             outbuffer[6] = 0x01;
@@ -439,6 +442,46 @@ void tud_hid_set_report_cb(uint8_t instance, uint8_t report_id, hid_report_type_
             tud_hid_report(0, buffer, bufsize);
             return;
             // tud_hid_report(0, buffer, bufsize);
+            break;
+        case 'Q': // 0x51 Read Blocks (16 Bytes) From Skylander
+            printf("Recieved query\n");
+            outbuffer = calloc(SKYLANDER_MSG_SIZE, 1);
+            outbuffer[0] = 0x51;
+            outbuffer[1] = 0x10;
+            if(buffer[1] == 0x10 || buffer[1] == 0x20 || buffer[1] == 0x30 || buffer[1] == 0x40 || buffer[1] == 0x50 || buffer[1] == 0x60 || buffer[1] == 0x70 || buffer[1] == 0x80 || buffer[1] == 0x90 || buffer[1] == 0xA0 || buffer[1] == 0xB0 || buffer[1] == 0xC0 || buffer[1] == 0xD0 || buffer[1] == 0xE0 || buffer[1] == 0xF0)
+            {
+                outbuffer[1] = 0x10;
+            }
+            if(buffer[1] == 0x11 || buffer[1] == 0x21 || buffer[1] == 0x31 || buffer[1] == 0x41 || buffer[1] == 0x51 || buffer[1] == 0x61 || buffer[1] == 0x71 || buffer[1] == 0x81 || buffer[1] == 0x91 || buffer[1] == 0xA1 || buffer[1] == 0xB1 || buffer[1] == 0xC1 || buffer[1] == 0xD1 || buffer[1] == 0xE1 || buffer[1] == 0xF1)
+            {
+                outbuffer[1] = 0x11;
+            }
+            if (buffer[1] == 0x12 || buffer[1] == 0x22 || buffer[1] == 0x32 || buffer[1] == 0x42 || buffer[1] == 0x52 || buffer[1] == 0x62 || buffer[1] == 0x72 || buffer[1] == 0x82 || buffer[1] == 0x92 || buffer[1] == 0xA2 || buffer[1] == 0xB2 || buffer[1] == 0xC2 || buffer[1] == 0xD2 || buffer[1] == 0xE2 || buffer[1] == 0xF2)
+            {
+                outbuffer[1] = 0x12;
+            }
+      
+            outbuffer[2] = buffer[2];
+
+            midbuffer = calloc(SKYLANDER_BLOCK_SIZE, 1);
+      
+            if(buffer[1] == 0x10 || buffer[1] == 0x20 || buffer[1] == 0x30 || buffer[1] == 0x40 || buffer[1] == 0x50 || buffer[1] == 0x60 || buffer[1] == 0x70 || buffer[1] == 0x80 || buffer[1] == 0x90 || buffer[1] == 0xA0 || buffer[1] == 0xB0 || buffer[1] == 0xC0 || buffer[1] == 0xD0 || buffer[1] == 0xE0 || buffer[1] == 0xF0)
+            {
+                curfile = loaded_skylanders[0];
+            }
+            f_lseek(curfile, buffer[2] * SKYLANDER_BLOCK_SIZE);
+            f_read(curfile, midbuffer, SKYLANDER_BLOCK_SIZE, &actual_len);
+
+            if (actual_len != SKYLANDER_BLOCK_SIZE)
+            {
+                printf("Read data length is %i not %i", actual_len, SKYLANDER_BLOCK_SIZE);
+                return;
+            }
+
+            memcpy(outbuffer + 3, midbuffer, SKYLANDER_BLOCK_SIZE);
+            printf("midbuffer: %16x", *midbuffer);
+            free(midbuffer);
+            tud_hid_report(0, outbuffer, SKYLANDER_MSG_SIZE);
             break;
         default:
             return;
