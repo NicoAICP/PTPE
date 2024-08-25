@@ -1,6 +1,7 @@
 # PTPE 
 
-If you want to support this Project, feel free to do so on Ko-Fi https://ko-fi.com/nicoaicp
+If you want to support this Project, feel free to do so on [Ko-Fi](https://ko-fi.com/nicoaicp)
+Also join the Discord [here](https://discord.gg/zx6RAAw7YJ)!
 
 ## Building
 
