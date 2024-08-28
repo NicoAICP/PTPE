@@ -7,6 +7,7 @@ Don't worry, PTPE is not dead, i just haven't coded in a while due to burnout.
  - Make sure to have Virtualisation enabled
 
  - Activate WSL
+   
     System Control Panel -> Programs and Features -> Activate/Deactivate Windows Features -> Activate Windows Subsystem for Linux
 
  - Open Powershell and enter
@@ -26,40 +27,63 @@ Don't worry, PTPE is not dead, i just haven't coded in a while due to burnout.
     wsl --set-version Ubuntu 1
 
  - Open Ubuntu and do following steps:
-    sudo apt-get update
-    sudo apt-get upgrade
-    sudo apt-get install doxygen
-    sudo apt-get install g++
-    sudo apt-get install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
 
-    cd [Path of your Development Folder]
-    git clone clone https://github.com/raspberrypi/pico-sdk
-    cd pico-sdk
-    git submodule update --init
-    cd ..
-
-    git clone https://github.com/NicoAICP/PTPE.git
-    cd PTPE
-    git submodule update --init --recursive
+    > sudo apt-get update
+    > 
+    > sudo apt-get upgrade
+    > 
+    > sudo apt-get install doxygen
+    > 
+    > sudo apt-get install g++
+    > 
+    > sudo apt-get install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
+    > 
+    > cd [Path of your Development Folder]
+    >
+    > 
+    > git clone clone https://github.com/raspberrypi/pico-sdk
+    > 
+    > cd pico-sdk
+    > 
+    > git submodule update --init
+    > 
+    > cd ..
+    > 
+    > git clone https://github.com/NicoAICP/PTPE.git
+    > 
+    > cd PTPE
+    > 
+    > git submodule update --init --recursive
 
  - Now in your File Explorer do following things:
+   
     In the PTPE repository please copy the tusb_config.h file to [Path of your Development Folder]\pico-sdk\lib\tinyusb\src\tusb_config.h
 
  - Go back to the WSL/Ubuntu Windows
 
- - Building for RP2040 (Pico 1) 
-    mkdir build_rp2040
-    cd build_rp2040
-    export PICO_SDK_PATH=../../pico-sdk
-    cmake ..
-    make
+ - Building for RP2040 (Pico 1)
+   
+    > mkdir build_rp2040
+    > 
+    > cd build_rp2040
+    > 
+    > export PICO_SDK_PATH=../../pico-sdk
+    > 
+    > cmake ..
+    > 
+    > make
 
  - Building for RP2350 (Pico 2)
-    mkdir build_rp2350
-    cd build_rp2350
-    export PICO_SDK_PATH=../../pico-sdk
-    cmake .. -DPICO_PLATFORM=rp2350-arm-s
-    make
+
+    > mkdir build_rp2350
+    > 
+    > cd build_rp2350
+    > 
+    > export PICO_SDK_PATH=../../pico-sdk
+    > 
+    > cmake .. -DPICO_PLATFORM=rp2350-arm-s
+    > 
+    > make
 
 ## Connecting the LCD:
 SCK -> GP14 (Pin 19)  
