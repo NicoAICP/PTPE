@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
+
 #include "hardware/gpio.h"
 #include "hw.h"
 #include "ST7735_TFT.h"
@@ -13,25 +14,23 @@
 #include "f_util.h"
 #include "ff.h"
 #include "hw_config.h"
-#include "pico/cyw43_arch.h"
-#include "lwip/ip_addr.h"
-#include "lwip/netif.h"
-#include "lwip/pbuf.h"
-#include "lwip/tcp.h"
+
+
 #include "sdmenu.h"
 #include "usb_descriptors.h"
 
 #include "Skylanders.h"
 
-#define PicoW 1
+#define PicoW 0
 #define BUTTON_MISC1 16
 #define BUTTON_LEFT 17
 #define BUTTON_SELECT 18
 #define BUTTON_RIGHT 19
 #define BUTTON_MISC2 20
 
-
 void init_hw() {
+       
+
   stdio_init_all();
   spi_init(SPI_PORT, 25000000);                // SPI with 1Mhz
   gpio_set_function(SPI_RX, GPIO_FUNC_SPI);
@@ -63,6 +62,8 @@ void init_buttons(){
 }
 void init_sd(){
   sd_card_t *pSD = sd_get_by_num(0);
+  DIR dir;
+  FIL fp;
     FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
     if (FR_OK != fr)
     {
@@ -74,9 +75,16 @@ void init_sd(){
             }    
         };
     }
+    else
+    {
+            f_opendir(&dir, "/"); // Open Root
+            f_open(&fp, "config.ptpe", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
+            f_puts("[CONFIG_WIFI];WIFI_SSID=;WIFI_PASS=;",&fp);
+            f_close(&fp);
+            f_closedir(&dir);
+    }
 
     //Create Folders for PTPE to read dumps from.
-    DIR dir;
     int ins = 25;
     FRESULT res = f_opendir(&dir, "/");                       /* Open SD Root */
     res = f_mkdir("Skylanders");
@@ -101,123 +109,7 @@ void init_sd(){
     f_closedir(&dir);
 }
 void handleWifi(){
-    if(Connected == 1){
-        char text[26];
-        sprintf(text," Pico IP: %s",ip4addr_ntoa(netif_ip4_addr(netif_list)));
-        drawIPHeader(text);
-    }
-    drawWifiMenu(0);
-    int wifiSel = 0;
-    int Selected = 0;
-
-    while(Selected == 0)
-    {
-        if (!gpio_get(BUTTON_LEFT))
-        {
-            if(wifiSel < 3){
-                wifiSel++;
-            }
-            drawWifiMenu(wifiSel);
-            sleep_ms(300);
-        }
-        else if (!gpio_get(BUTTON_SELECT))
-        {
-            Selected = 1;
-            sleep_ms(300);
-        }
-        else if (!gpio_get(BUTTON_RIGHT))
-        {
-             if(wifiSel > 0){
-                wifiSel--;
-            }
-            sleep_ms(300);
-            drawWifiMenu(wifiSel);
-        }
-        
-    }
     
-    FRESULT res;
-    DIR dir;
-    FILINFO fno;
-    FIL fp;
-    switch(wifiSel){
-        case 0:
-            f_opendir(&dir, "/"); // Open Root
-            res = f_open(&fp, "config.ptpe", FA_CREATE_ALWAYS | FA_WRITE | FA_READ);
-            int i = f_puts("[CONFIG_WIFI];WIFI_SSID=;WIFI_PASS=;",&fp);
-            f_close(&fp);
-            drawSetupMenu(1);
-            while(1)
-            {
-                if(!gpio_get(BUTTON_SELECT))
-                {
-                    reboot();
-                }
-            }
-            break;
-        case 1:
-            f_opendir(&dir, "/"); // Open Root
-            res = f_open(&fp, "config.ptpe", FA_READ);
-            if(res){
-                drawError(1);
-                while(1)
-                {   
-                    if(!gpio_get(BUTTON_SELECT))
-                    {
-                        reboot();
-                    }
-                }
-            }
-            TCHAR buff;
-            char *pre_ssid;
-            char *pre_pass;
-            char *ssid;
-            char *pass;
-            f_gets(&buff, 1000, &fp);
-            f_close(&fp);
-            
-            strtok(&buff,";");
-            pre_ssid = strtok(NULL,";");
-            pre_pass = strtok(NULL,";");
-            
-            strtok(pre_ssid, "=");
-            ssid = strtok(NULL,"=");
-
-            strtok(pre_pass, "=");
-            pass = strtok(NULL,"=");
-
-            cyw43_arch_enable_sta_mode();
-            int err = cyw43_arch_wifi_connect_timeout_ms(ssid, pass, CYW43_AUTH_WPA2_AES_PSK, 20000);
-            if (err != 0) {
-                drawError(2);
-                while(1)
-                {   
-                    if(!gpio_get(BUTTON_SELECT))
-                    {
-                        reboot();
-                    }
-                }
-            }
-            Connected = 1;
-            handleWifi();
-            
-            break;
-        case 2:
-            //TODO: TCP Transfer Server
-            //opens a tcp transfer server to recieve Files
-            drawError(99); //ERROR FOR NOT IMPLEMENTED
-            while(1)
-            {   
-                if(!gpio_get(BUTTON_SELECT))
-                {
-                    reboot();
-                }
-            }
-            break;
-        case 3:
-            reboot();
-            break;
-    }
 }
 bool StartsWith(const char *a, const char *b)
 {
@@ -229,6 +121,9 @@ bool StartsWith(const char *a, const char *b)
 // main loop
 
 int main() {
+        gpio_init(25);
+        gpio_set_dir(25, 1);
+        gpio_put(25, true);
   init_hw();
   init_buttons();
 #if PicoW == 1

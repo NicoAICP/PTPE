@@ -1,7 +1,7 @@
 # Generated Cmake Pico project file
 
 cmake_minimum_required(VERSION 3.13)
-set(PICO_BOARD pico_w)
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -17,16 +17,16 @@ pico_sdk_init()
 
 # library configuration (override if necessary, see pico-st7735 for a complete list)
 set(SPI_TFT_PORT "spi1" CACHE STRING "TFT spi port-name")
-set(SPI_TFT_CS   "9"    CACHE STRING "TFT CS  pin number")
-set(SPI_TFT_DC   "10"   CACHE STRING "TFT DC  pin number")
-set(SPI_TFT_RST  "11"   CACHE STRING "TFT RST pin number")
+set(SPI_TFT_CS   "9"    CACHE STRING "TFT CS  pin number") #9
+set(SPI_TFT_DC   "10"   CACHE STRING "TFT DC  pin number") #10
+set(SPI_TFT_RST  "11"   CACHE STRING "TFT RST pin number") #11
 set(TFT_OPTIONS TFT_ENABLE_BLACK TFT_ENABLE_RESET TFT_ENABLE_TEXT TFT_ENABLE_SHAPES
                 TFT_ENABLE_ROTATE TFT_ENABLE_SCROLL
             CACHE STRING "TFT options/functions")
 
 #program configuration
 set(SPI_PORT "spi1" CACHE STRING "spi port-name")
-set(SPI_RX   "12"   CACHE STRING "RX  pin number")
+set(SPI_RX   "12"   CACHE STRING "RX  pin number") #12
 set(SPI_TX   "15"   CACHE STRING "TX  pin number")
 set(SPI_SCK  "14"   CACHE STRING "SCK pin number")
 
@@ -58,7 +58,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
 endif()
 add_subdirectory(FatFs_SPI build)
-add_executable(${PROJECT_NAME} main.c shared.c menu.c hw_config.c sdmenu.c usb_descriptors.c Skylanders.c)
+add_executable(${PROJECT_NAME} main.c shared.c menu.c  usb_descriptors.c Skylanders.c sdmenu.c hw_config.c ) #
 
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
@@ -73,9 +73,8 @@ add_subdirectory(pico-st7735)
 target_link_libraries(${PROJECT_NAME}
   pico_stdlib tinyusb_device tinyusb_board hardware_i2c hardware_gpio
   hardware_spi
-  pico_cyw43_arch_lwip_threadsafe_background 
   st7735
   FatFs_SPI
-)
+)   #
 
 pico_add_extra_outputs(${PROJECT_NAME})
