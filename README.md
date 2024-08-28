@@ -1,6 +1,8 @@
-# PTPE
+# PTPE 
 
-Don't worry, PTPE is not dead, i just haven't coded in a while due to burnout.
+If you want to support this Project, feel free to do so on [Ko-Fi](https://ko-fi.com/nicoaicp)
+
+Also join the Discord [here](https://discord.gg/zx6RAAw7YJ)!
 
 ## Building under Windows using WSL
 
