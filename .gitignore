@@ -2,6 +2,7 @@ work
 build
 build_rp2040
 build_rp2350
+.vscode
 .vscode/.cortex-debug.peripherals.state.json
 .vscode/.cortex-debug.registers.state.json
 TODO
