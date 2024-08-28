@@ -1,6 +1,3 @@
-[submodule "no-OS-FatFS-SD-SPI-RPi-Pico"]
-	path = no-OS-FatFS-SD-SPI-RPi-Pico
-	url = https://github.com/amadeoestrada/no-OS-FatFS-SD-SPI-RPi-Pico.git
 [submodule "FatFS_SPI"]
 	path = FatFS_SPI
 	url = https://github.com/NicoAICP/no-OS-FatFS-SD-SPI-RPi-Pico/
