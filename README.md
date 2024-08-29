@@ -65,29 +65,7 @@ Also join the Discord [here](https://discord.gg/zx6RAAw7YJ)!
 
  - Go back to the WSL/Ubuntu Windows
 
- - Building for RP2040 (Pico 1)
-   
-    > mkdir build_rp2040
-    > 
-    > cd build_rp2040
-    > 
-    > export PICO_SDK_PATH=../../pico-sdk
-    > 
-    > cmake ..
-    > 
-    > make
-
- - Building for RP2350 (Pico 2)
-
-    > mkdir build_rp2350
-    > 
-    > cd build_rp2350
-    > 
-    > export PICO_SDK_PATH=../../pico-sdk
-    > 
-    > cmake .. -DPICO_PLATFORM=rp2350-arm-s
-    > 
-    > make
+ - Run the build script for the platform you want to compile for. if using build_all.sh it builds for all platforms.
 
 ## Connecting the LCD:
 SCK -> GP14 (Pin 19)  
