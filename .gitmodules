@@ -1,7 +1,7 @@
 [submodule "FatFS_SPI"]
-	path = FatFS_SPI
+	path = libs/FatFS_SPI
 	url = https://github.com/NicoAICP/no-OS-FatFS-SD-SPI-RPi-Pico/
 	branch = source
 [submodule "pico-st7735"]
-	path = pico-st7735
+	path = libs/pico-st7735
 	url = https://github.com/NicoAICP/pico-st7735
