@@ -57,8 +57,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 else()
 endif()
-add_subdirectory(FatFs_SPI build)
-add_executable(${PROJECT_NAME} main.c shared.c menu.c  usb_descriptors.c Skylanders.c sdmenu.c hw_config.c ) #
+add_subdirectory(libs/FatFs_SPI build)
+add_executable(${PROJECT_NAME} src/main.c src/shared.c src/menu.c  src/usb_descriptors.c src/Skylanders.c src/sdmenu.c src/hw_config.c ) #
 
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
@@ -67,7 +67,7 @@ pico_set_program_name(${PROJECT_NAME} "ptpe")
 pico_set_program_version(${PROJECT_NAME} "0.1")
 
 # build the st7735-library from our submodule
-add_subdirectory(pico-st7735)
+add_subdirectory(libs/pico-st7735)
 
 # add libraries
 target_link_libraries(${PROJECT_NAME}
