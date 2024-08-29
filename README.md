@@ -43,7 +43,7 @@ Also join the Discord [here](https://discord.gg/zx6RAAw7YJ)!
     > cd [Path of your Development Folder]
     >
     > 
-    > git clone clone https://github.com/raspberrypi/pico-sdk
+    > git clone https://github.com/raspberrypi/pico-sdk
     > 
     > cd pico-sdk
     > 
