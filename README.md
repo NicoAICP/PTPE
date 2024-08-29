@@ -54,6 +54,8 @@ Also join the Discord [here](https://discord.gg/zx6RAAw7YJ)!
     > git clone https://github.com/NicoAICP/PTPE.git
     > 
     > cd PTPE
+    >
+    > git checkout rp2350-sdk2.0
     > 
     > git submodule update --init --recursive
 
