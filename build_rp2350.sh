@@ -1,5 +1,6 @@
 #!/bin/sh
 #Building for RP2350
+pico_sdk_path="../../pico-sdk"
 rm -rf /build_rp2350
 mkdir build_rp2350
 cd build_rp2350 || exit

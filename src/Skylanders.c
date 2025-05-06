@@ -6,7 +6,7 @@
 #include "f_util.h"
 #include "ff.h"
 #include "hw_config.h"
-#include "rtc.h"
+#include "my_rtc.h"
 #include "bsp/board.h"
 #include "tusb.h"
 

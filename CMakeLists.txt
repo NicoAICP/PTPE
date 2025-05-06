@@ -57,7 +57,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_definitions(DEBUG)
 else()
 endif()
-add_subdirectory(libs/FatFs_SPI build)
+add_subdirectory(libs/FatFS_SPI/src build)
 add_executable(${PROJECT_NAME} src/main.c src/shared.c src/menu.c  src/usb_descriptors.c src/Skylanders.c src/sdmenu.c src/hw_config.c ) #
 
 pico_enable_stdio_uart(${PROJECT_NAME} 1)
@@ -74,7 +74,7 @@ target_link_libraries(${PROJECT_NAME}
   pico_stdlib tinyusb_device tinyusb_board hardware_i2c hardware_gpio
   hardware_spi
   st7735
-  FatFs_SPI
+  no-OS-FatFS-SD-SDIO-SPI-RPi-Pico
 )   #
 
 pico_add_extra_outputs(${PROJECT_NAME})

@@ -10,7 +10,7 @@
 #include "tusb.h"
 #include "shared.h"
 #include "menu.h"
-#include "rtc.h"
+#include "my_rtc.h"
 #include "f_util.h"
 #include "ff.h"
 #include "hw_config.h"
@@ -61,10 +61,12 @@ void init_buttons(){
   gpio_pull_up(BUTTON_MISC2);
 }
 void init_sd(){
-  sd_card_t *pSD = sd_get_by_num(0);
+  //sd_card_t *pSD = sd_get_by_num(0);
   DIR dir;
   FIL fp;
-    FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+  FATFS fs;
+    //FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+    FRESULT fr = f_mount(&fs, "", 1);
     if (FR_OK != fr)
     {
         drawError(0);
