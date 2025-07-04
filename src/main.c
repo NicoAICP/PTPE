@@ -95,6 +95,18 @@ void init_sd(){
         drawText(5, ins, "Created Skylanders Folder", ST7735_WHITE, ST7735_BLACK, 1);
         ins = ins+12;
     }
+    res == f_mkdir("Skylanders/Filters");
+    if(res == FR_OK)
+    {
+        drawText(5, ins, "Created Skylanders Filters Folder", ST7735_WHITE, ST7735_BLACK, 1);
+        ins = ins+12;
+    }
+    res == f_mkdir("Skylanders/Files");
+    if(res == FR_OK)
+    {
+        drawText(5, ins, "Created Skylanders Files Folder", ST7735_WHITE, ST7735_BLACK, 1);
+        ins = ins+12;
+    }
     res = f_mkdir("Dimensions");
     if(res == FR_OK)
     {
@@ -109,6 +121,29 @@ void init_sd(){
         ins = ins+12;
     }
     f_closedir(&dir);
+
+    char test[100];
+    int is = 0;
+    FILINFO* fno;
+    drawText(5, 25 + (12*is), "Getting Filters", ST7735_RED, ST7735_BLACK, 1);
+    is++;
+    f_opendir(&dir, "/Skylanders/Filters"); ///Skylanders/Filters
+    for (;;) {
+      fr = f_readdir(&dir, fno);  
+      if (fr != FR_OK || !fno->fname[0]) break;   
+      if (fno->fattrib & AM_DIR) {   
+        sprintf(test, "subfolder: %s", fno->fname);
+        drawText(5, 25 + (12*is), test, ST7735_RED, ST7735_BLACK, 1);
+        is++;
+      } else {                       
+        sprintf(test, "file: %s", fno->fname);
+        drawText(5, 25 + (12*is), test, ST7735_RED, ST7735_BLACK, 1);
+        is++;
+      }
+      if (fr != FR_OK) break;
+      if (is == 7) break;
+    } 
+    sleep_ms(3000);
 }
 void handleWifi(){
     

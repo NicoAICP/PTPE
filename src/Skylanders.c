@@ -94,6 +94,7 @@ int SkylanderEndsWith(char *str, char *suffix)
          (0 == strcmp(str + (str_len - suffix_len), suffix));
 }
 
+/// HERE IT SHOULD PRINT THE NAME BUT IT DOES NOT
 void GetSkylanderCount(){
     FRESULT res;
     DIR dir;
@@ -177,36 +178,73 @@ void handleSkylander(int selection){
     
 }
 
+int GetSkylanderFilters(){
+  clearScreen();
+    FRESULT res;
+    DIR dir = {};
+    FILINFO* fno;
+    FRESULT fr;
+    FATFS fs;
+    //FRESULT fr = f_mount(&pSD->fatfs, pSD->pcName, 1);
+    fr = f_mount(&fs, "", 1);
+    int is = 0;
+    drawText(5, 25 + (12*is), "Getting Filters", ST7735_RED, ST7735_BLACK, 1);
+    is++;
+    f_opendir(&dir, "/Skylanders/Filters"); ///Skylanders/Filters
+    for (;;) {
+      fr = f_readdir(&dir, fno);  
+      if (fr != FR_OK || !fno->fname[0]) break;   
+      if (fno->fattrib & AM_DIR) {   
+        sprintf(test, "subfolder: %s", fno->fname);
+        drawText(5, 25 + (12*is), test, ST7735_RED, ST7735_BLACK, 1);
+        is++;
+      } else {                       
+        sprintf(test, "file: %s", fno->fname);
+        drawText(5, 25 + (12*is), test, ST7735_RED, ST7735_BLACK, 1);
+        is++;
+      }
+      if (fr != FR_OK) break;
+      if (is == 7) break;
+    } 
+   /* fr = f_findfirst(&dir, fno, "/Skylanders", "*");
+    if (FR_OK != fr) {
+      sprintf(test, "f_findfirst error: %s (%d)\n", FRESULT_str(fr), fr);
+      drawText(5, 25 + (12*is), test, ST7735_RED, ST7735_BLACK, 1);
+      sleep_ms(10000);
+      return;
+    }
+    drawText(5, 25 + (12*is), "after find first", ST7735_RED, ST7735_BLACK, 1);
+    is++;
+    while (fr == FR_OK && fno->fname[0]) { /
+      const char *pcWritableFile = "writable file",
+                 *pcReadOnlyFile = "read only file",
+                 *pcDirectory = "directory";
+      const char *pcAttrib;
+     
+      if (fno->fattrib & AM_DIR) {
+          pcAttrib = pcDirectory;
+      } else if (fno->fattrib & AM_RDO) {
+          pcAttrib = pcReadOnlyFile;
+      } else {
+          pcAttrib = pcWritableFile;
+      }
+      sprintf(test, "%s", pcAttrib);
+      drawText(5, 25 + (12*is), test, ST7735_RED, ST7735_BLACK, 1);
+      is++;
+
+      fr = f_findnext(&dir, fno); 
+  }*/
+    f_closedir(&dir);
+    sleep_ms(10000);
+}
+
 void SkylanderMenu(int cursor, int select){
-            if(first_init == 0) {
-                drawText(5, 37, "Loading...", ST7735_WHITE, ST7735_BLACK, 1);
-                GetSkylanderCount();
-                first_init = 1;
-                
-                drawMenu(0);
-        }
-    if(select == 1 ){
-        handleSkylander(cursor);
-    }
-    else
-    {
-        switch(cursor){
-            case 0:
-                drawText(5, 37, "-  Add Skylander        <", ST7735_WHITE, ST7735_BLACK, 1);
-                drawText(5, 49, "-  Remove Skylander      ", ST7735_WHITE, ST7735_BLACK, 1);
-                drawText(5, 61, "-  Exit Emulation        ", ST7735_WHITE, ST7735_BLACK, 1);
-                break;
-            case 1:
-                drawText(5, 37, "-  Add Skylander         ", ST7735_WHITE, ST7735_BLACK, 1);
-                drawText(5, 49, "-  Remove Skylander     <", ST7735_WHITE, ST7735_BLACK, 1);
-                drawText(5, 61, "-  Exit Emulation        ", ST7735_WHITE, ST7735_BLACK, 1);
-            
-                break;
-            case 2:
-                drawText(5, 37, "-  Add Skylander         ", ST7735_WHITE, ST7735_BLACK, 1);
-                drawText(5, 49, "-  Remove Skylander      ", ST7735_WHITE, ST7735_BLACK, 1);
-                drawText(5, 61, "-  Exit Emulation       <", ST7735_WHITE, ST7735_BLACK, 1);
-                break;
-        }
-    }
+    //How Many Config Files are there
+    GetSkylanderFilters();
+    drawError(98);
+    sleep_ms(10000);
+    reboot();
+
+    //If 0 = Go to Skylander Main Menu
+    //If more than 0 = Selection Menu of Filter.
 }
